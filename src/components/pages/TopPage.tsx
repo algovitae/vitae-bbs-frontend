@@ -4,6 +4,7 @@ import { useRecoilCallback, useRecoilValue } from "recoil";
 import { apolloClient } from "../../api";
 import { AllUsersDocument, LoginDocument, LoginMutation } from "../../api/generated";
 import { allUsersSelector } from "../../selectors/user";
+import { LoggedInUserName } from "../auth/LoggedInUserName";
 
 const TopPageContent = () => {
     const data = useRecoilValue(allUsersSelector);
@@ -11,17 +12,10 @@ const TopPageContent = () => {
 }
 
 const TopPage: React.FC = () => {
-    const login = useRecoilCallback(() => async () => {
-        const { data, errors } = await apolloClient.mutate<LoginMutation>({ mutation: LoginDocument, variables: { email: 'hoge@example.com', password: 'password' } })
-        if (errors) {
-            console.error(errors)
-            return;
-        }
-        console.log(data?.login);
-        return;
-    })
     return <Card>
-        <Button onClick={login}>button</Button>
+        <Card>
+            hello! you are <LoggedInUserName />
+        </Card>
         <React.Suspense fallback={<Skeleton />}>
             <TopPageContent />
         </React.Suspense>
