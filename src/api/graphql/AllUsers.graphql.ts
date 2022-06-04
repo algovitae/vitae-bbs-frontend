@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const AllUsersQuery = gql`
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const AllUsersQuery = gql`
 query AllUsers {
   allUsers {
     user_id
