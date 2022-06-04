@@ -9,6 +9,7 @@ mutation Login($email: String, $password: String) {
       user_identity {
         email, 
         user {
+          user_id
           user_name
         }
       }

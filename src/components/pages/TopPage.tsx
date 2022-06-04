@@ -2,7 +2,7 @@ import { Button, Card, Skeleton, Table } from "antd"
 import React from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { apolloClient } from "../../api";
-import { LoginDocument, LoginMutation } from "../../api/generated";
+import { AllUsersDocument, LoginDocument, LoginMutation } from "../../api/generated";
 import { allUsersSelector } from "../../selectors/user";
 
 const TopPageContent = () => {
