@@ -20,7 +20,7 @@ export const loggedInUserIdSelector = selector({
 })
 
 export const loggedInUserNameSelector = selector({
-    key: 'loggedInUserIdSelector',
+    key: 'loggedInUserNameSelector',
     get: ({ get }) => {
         const accessToken = get(rawAccessTokenAtom)
         return accessToken?.user_identity?.user?.user_name
