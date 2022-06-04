@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.less';
 import { Button, Card } from 'antd';
+import { RecoilRoot } from 'recoil';
+import TopPage from './components/pages/TopPage';
 
 function App() {
   return (
-    <Card title="antd">
-      body
-      <Button type='primary' >BTN</Button>
-    </Card>
+    <RecoilRoot>
+      <TopPage/>
+    </RecoilRoot>
   );
 }
 
