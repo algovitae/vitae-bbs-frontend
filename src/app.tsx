@@ -7,17 +7,7 @@ import TopPage from './components/pages/top-page';
 import LoginPage from './components/pages/login-page';
 import {loggedInUserIdSelector} from './selectors/auth';
 import {AppLayout} from './layout';
-
-function RequireAuth({children}: {children: JSX.Element}) {
-  const userId = useRecoilValue(loggedInUserIdSelector);
-  const location = useLocation();
-
-  if (!userId) {
-    return <Navigate replace to='/login' state={{from: location}}/>;
-  }
-
-  return children;
-}
+import {RequireAuth} from './components/auth/require-auth';
 
 function AppRoutes() {
   return (
@@ -27,7 +17,7 @@ function AppRoutes() {
         <Route
           path='*' element={
             (
-              <RequireAuth>
+              <RequireAuth redirect>
                 <Routes>
                   <Route path='/' element={<TopPage/>}/>
                 </Routes>
