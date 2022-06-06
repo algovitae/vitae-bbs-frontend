@@ -1,5 +1,6 @@
 import {Button, Form, Input, Layout, PageHeader} from 'antd';
 import {useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useRecoilCallback} from 'recoil';
 import {LoginMutationVariables} from '../../api/generated';
 import {useAuthMutations} from '../../selectors/auth';
@@ -7,6 +8,10 @@ import {useAuthMutations} from '../../selectors/auth';
 function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [loginApi] = useAuthMutations();
+  const location = useLocation();
+  const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const from: string = (location.state as any)?.from?.pathname || '/';
 
   const login = useRecoilCallback(
     () =>
@@ -15,8 +20,7 @@ function LoginPage() {
         try {
           const [success] = await loginApi({email, password});
           if (success) {
-            // eslint-disable-next-line no-alert
-            alert('login succeeded. todo: navigation');
+            navigate(from);
           } else {
             // eslint-disable-next-line no-alert
             alert('login failed.');
@@ -27,6 +31,7 @@ function LoginPage() {
 
         setLoading(false);
       },
+    [from],
   );
 
   return (
