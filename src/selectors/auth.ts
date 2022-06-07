@@ -7,6 +7,7 @@ import {
   snapshot_UNSTABLE,
   useRecoilCallback,
   useRecoilState,
+  useSetRecoilState,
 } from 'recoil';
 import {
   LoginDocument,
@@ -43,24 +44,16 @@ export const loggedInUserNameSelector = selector({
   },
 });
 
-// MEMO: 引数のuser_idはloggedInUserIdSelectorをgetする想定。そのような操作を強制することでuser_idが変わったときに自然と更新がかかるようになる。
-export const peekBearerToken = async (user_id: string | undefined) => {
-  const snapshot = snapshot_UNSTABLE();
-  const accessToken = await snapshot.getPromise(rawAccessTokenAtom);
-  if (accessToken?.user_identity?.user?.user_id === user_id) {
-    return accessToken?.token ?? undefined;
-  }
-
-  return undefined;
-};
+export const bearerTokenSelector = selector({
+  key: 'bearerTokenSelector',
+  get({get}) {
+    const accessToken = get(rawAccessTokenAtom);
+    return accessToken?.token;
+  },
+});
 
 export const useAuthMutations = () => {
-  const updateRawAccessToken = useRecoilCallback(
-    ({set}) =>
-      (access_token: LoginMutation['login'] | undefined) => {
-        set(rawAccessTokenAtom, access_token);
-      },
-  );
+  const setRawAccessToken = useSetRecoilState(rawAccessTokenAtom);
   const login = async ({email, password}: Required<LoginMutationVariables>) => {
     const apolloClient = apiClientWithoutAuth();
     const {login}
@@ -70,13 +63,12 @@ export const useAuthMutations = () => {
           variables: {email, password},
         })
       ).data ?? {};
-
-    updateRawAccessToken(login ?? undefined);
+    setRawAccessToken(login ?? undefined);
     return [Boolean(login), ''] as const; // TODO: add reason?
   };
 
   const logout = async () => {
-    updateRawAccessToken(undefined);
+    setRawAccessToken(undefined);
     return [true, ''] as const;
   };
 

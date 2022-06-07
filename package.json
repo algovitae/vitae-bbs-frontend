@@ -42,8 +42,8 @@
     "xo": "^0.49.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "DISABLE_ESLINT_PLUGIN=true craco start",
+    "build": "DISABLE_ESLINT_PLUGIN=true craco build",
     "test": "xo && craco test",
     "eject": "react-scripts eject",
     "graphql:generate": "graphql-codegen --config graphql.codegen.yml"

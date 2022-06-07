@@ -9,13 +9,14 @@ import {
   LoginMutation,
   LoginMutationVariables,
 } from '../api/generated';
-import {loggedInUserIdSelector, peekBearerToken} from './auth';
+import {bearerTokenSelector, loggedInUserIdSelector} from './auth';
 
 export const apiClientSelector = selector<ApolloClient<NormalizedCacheObject>>({
   key: 'apiClientSelector',
   async get({get}) {
     const userId = get(loggedInUserIdSelector);
-    const token = await peekBearerToken(userId);
+    const token = get(bearerTokenSelector);
+    console.log('apiClientSelector userId', userId, token);
     const client = new ApolloClient({
       uri: 'http://localhost:4000',
       headers: {
@@ -26,4 +27,5 @@ export const apiClientSelector = selector<ApolloClient<NormalizedCacheObject>>({
     });
     return client;
   },
+  dangerouslyAllowMutability: true,
 });

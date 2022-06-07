@@ -5,6 +5,7 @@ import {RecoilRoot, useRecoilValue} from 'recoil';
 import {BrowserRouter, Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import TopPage from './components/pages/top-page';
 import LoginPage from './components/pages/login-page';
+import GroupPage from './components/pages/group-page';
 import {loggedInUserIdSelector} from './selectors/auth';
 import {AppLayout} from './layout';
 import {RequireAuth} from './components/auth/require-auth';
@@ -20,6 +21,7 @@ function AppRoutes() {
               <RequireAuth redirect>
                 <Routes>
                   <Route path='/' element={<TopPage/>}/>
+                  <Route path='/groups/:group_id' element={<GroupPage/>}/>
                 </Routes>
               </RequireAuth>
             )
