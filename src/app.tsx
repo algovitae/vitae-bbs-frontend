@@ -9,6 +9,7 @@ import GroupPage from './components/pages/group-page';
 import {loggedInUserIdSelector} from './selectors/auth';
 import {AppLayout} from './layout';
 import {RequireAuth} from './components/auth/require-auth';
+import ThreadPage from './components/pages/thread-page';
 
 function AppRoutes() {
   return (
@@ -21,7 +22,9 @@ function AppRoutes() {
               <RequireAuth redirect>
                 <Routes>
                   <Route path='/' element={<TopPage/>}/>
-                  <Route path='/groups/:group_id' element={<GroupPage/>}/>
+                  <Route path='groups/:group_id' element={<GroupPage/>}>
+                    <Route path='threads/:thread_id' element={<ThreadPage/>}/>
+                  </Route>
                 </Routes>
               </RequireAuth>
             )

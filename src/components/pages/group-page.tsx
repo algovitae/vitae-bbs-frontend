@@ -1,6 +1,6 @@
-import {Card, Skeleton, Table} from 'antd';
+import {Card, Col, Row, Skeleton, Table} from 'antd';
 import React from 'react';
-import {Link, Navigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useOutlet, useParams} from 'react-router-dom';
 import {useRecoilValue} from 'recoil';
 import {groupSelector, groupThreadsSelector} from '../../selectors/group';
 
@@ -17,18 +17,25 @@ function GroupPageContent() {
       <Table
         dataSource={threads} rowKey='thread_id' columns={[{
           dataIndex: 'thread_name',
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          render: (name, {thread_id}) => (<Link to={`/group/${group?.group_id}/thread/${thread_id}`}>{name}</Link>),
+          render: (name, {thread_id}) => (<Link to={`/groups/${group?.group_id}/threads/${thread_id}`}>{name}</Link>),
         }]}/>
     </Card>
   );
 }
 
 function GroupPage() {
+  const outlet = useOutlet();
   return (
     <Card>
       <React.Suspense fallback={<Skeleton/>}>
-        <GroupPageContent/>
+        <Row>
+          <Col md={outlet ? 6 : 24} xs={24}>
+            <GroupPageContent/>
+          </Col>
+          <Col md={outlet ? 18 : 0} xs={24}>
+            {outlet}
+          </Col>
+        </Row>
       </React.Suspense>
     </Card>
   );
