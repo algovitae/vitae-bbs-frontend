@@ -19,3 +19,11 @@ const groupThreadsQuery = gql`
       }
     }
 `;
+
+const createGroupMutation = gql`
+  mutation CreateGroup($groupName: String!, $memberships: [String!]!) {
+    createGroup(group_name: $groupName, memberships: $memberships) {
+      group_id  
+    }
+  }
+`;
