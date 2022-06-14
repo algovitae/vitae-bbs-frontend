@@ -1,47 +1,55 @@
 import {cp} from 'node:fs';
 import {group} from 'node:console';
 import {Button, Card, Comment, Form, Input, Skeleton} from 'antd';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useRecoilCallback, useRecoilValue} from 'recoil';
 import TextArea from 'antd/lib/input/TextArea';
+import {prop, reverse, sortBy} from 'rambda';
 import {CreateThreadCommentDocument, CreateThreadCommentMutation, ThreadComment} from '../../api/generated';
 import {threadCommentsSelector, threadSelector} from '../../selectors/thread';
-import { apiClientSelector } from '../../selectors/api';
+import {apiClientSelector} from '../../selectors/api';
+
+type ThreadFormValues = {
+  title: string;
+  body: string;
+};
 
 function ThreadForm({groupId, threadId}: {groupId: string; threadId: string}) {
   const [isLoading, setIsLoading] = useState(false);
-  const callback = useRecoilCallback(({snapshot, refresh})=> async({title, body})=> {
+  const callback = useRecoilCallback(({snapshot, refresh}) => async ({title, body}: ThreadFormValues) => {
     setIsLoading(true);
 
     try {
       const client = await snapshot.getPromise(apiClientSelector);
-      const param = {
+      const parameter = {
         groupId,
         threadId,
         title,
-        body
+        body,
       };
-      console.log(param);
+      console.log(parameter);
       const result = await client.mutate<CreateThreadCommentMutation>({
         mutation: CreateThreadCommentDocument,
-        variables: param,
+        variables: parameter,
       });
       console.log(result);
-      refresh(threadCommentsSelector({group_id: groupId, thread_id:threadId}));
-    } catch(e) {
-      console.error(e);
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      refresh(threadCommentsSelector({group_id: groupId, thread_id: threadId}));
+    } catch (error) {
+      console.error(error);
     }
+
     setIsLoading(false);
   }, [groupId, threadId]);
 
   return (
     <Card title='新規投稿'>
-      <Form onFinish={callback}>
-        <Form.Item required name='title' label='件名'>
+      <Form<ThreadFormValues> onFinish={callback}>
+        <Form.Item<ThreadFormValues> required name='title' label='件名'>
           <Input/>
         </Form.Item>
-        <Form.Item required name='body' label='本文'>
+        <Form.Item<ThreadFormValues> required name='body' label='本文'>
           <TextArea/>
         </Form.Item>
         <Form.Item>
@@ -69,7 +77,7 @@ function ThreadPageContent() {
   return (
     <Card title={thread?.thread_name}>
       <ThreadForm groupId={thread?.group_id} threadId={thread?.thread_id}/>
-      {comments.map(c => <ThreadCommentCard key={c.comment_id} {...c}/>)}
+      {reverse(sortBy(prop('commented_at'), comments)).map(c => <ThreadCommentCard key={c.comment_id} {...c}/>)}
     </Card>
   );
 }
