@@ -26,6 +26,14 @@ const threadCommentsQuery = gql`
     }
 `;
 
+const createThreadMutation = gql`
+  mutation CreateThread($groupId: String!, $threadName: String!) {
+    createThread(group_id: $groupId, thread_name: $threadName) {
+      thread_id
+    }
+  }
+`;
+
 const threadCommentMutation = gql`
   mutation CreateThreadComment($groupId: String!, $threadId: String!, $title: String!, $body: String!) {
     createThreadComment(group_id: $groupId, thread_id: $threadId, title: $title, body: $body) {
