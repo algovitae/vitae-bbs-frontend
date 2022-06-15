@@ -66,19 +66,19 @@ function InitiateCreateThreadButton({groupId}: {groupId: string}) {
 }
 
 function GroupPageContent() {
-  const parameters = useParams<{group_id: string}>();
-  const group = useRecoilValue(groupSelector(parameters.group_id ?? ''));
-  const threads = useRecoilValue(groupThreadsSelector(parameters.group_id ?? ''));
+  const parameters = useParams<{groupId: string}>();
+  const group = useRecoilValue(groupSelector(parameters.groupId ?? ''));
+  const threads = useRecoilValue(groupThreadsSelector(parameters.groupId ?? ''));
   if (!group) {
     return <Navigate to='/'/>;
   }
 
   return (
-    <Card title={group?.group_name} extra={<InitiateCreateThreadButton groupId={group.group_id}/>}>
+    <Card title={group?.groupName} extra={<InitiateCreateThreadButton groupId={group.id}/>}>
       <Table
-        dataSource={threads} rowKey='thread_id' columns={[{
-          dataIndex: 'thread_name',
-          render: (name, {thread_id}) => (<Link to={`/groups/${group?.group_id}/threads/${thread_id}`}>{name}</Link>),
+        dataSource={threads} rowKey='id' columns={[{
+          dataIndex: 'threadName',
+          render: (name, thread) => (<Link to={`/groups/${group.id}/threads/${thread.id}`}>{name}</Link>),
         }]}/>
     </Card>
   );

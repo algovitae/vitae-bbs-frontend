@@ -6,8 +6,8 @@ const myGroupsQuery = gql`
       user {
         memberships {
           group {
-            group_id
-            group_name
+            id
+            groupName
           }
         }
       }

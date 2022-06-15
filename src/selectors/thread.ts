@@ -2,13 +2,13 @@ import {selectorFamily} from 'recoil';
 import {Thread, ThreadComment, ThreadCommentsDocument, ThreadCommentsQuery, ThreadDocument, ThreadQuery} from '../api/generated';
 import {apiClientSelector} from './api';
 
-export const threadSelector = selectorFamily<Pick<Thread, 'group_id' | 'thread_id' | 'thread_name'> | undefined, Pick<Thread, 'group_id' | 'thread_id'>>({
+export const threadSelector = selectorFamily<Pick<Thread, 'id' | 'groupId' | 'threadName'> | undefined, string>({
   key: 'threadSelector',
-  get: ({group_id, thread_id}) => async ({get}) => {
+  get: threadId => async ({get}) => {
     const api = get(apiClientSelector);
     const result = await api.query<ThreadQuery>({
       query: ThreadDocument,
-      variables: {groupId: group_id, threadId: thread_id},
+      variables: {threadId},
     });
     return result.data.thread ?? undefined;
   },
@@ -16,11 +16,11 @@ export const threadSelector = selectorFamily<Pick<Thread, 'group_id' | 'thread_i
 
 export const threadCommentsSelector = selectorFamily({
   key: 'threadCommentsSelector',
-  get: ({group_id, thread_id}: Pick<Thread, 'group_id' | 'thread_id'>) => async ({get}) => {
+  get: (threadId: string) => async ({get}) => {
     const api = get(apiClientSelector);
     const result = await api.query<ThreadCommentsQuery>({
       query: ThreadCommentsDocument,
-      variables: {groupId: group_id, threadId: thread_id},
+      variables: {threadId},
     });
     return result.data.thread?.comments ?? [];
   },

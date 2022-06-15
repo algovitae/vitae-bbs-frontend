@@ -1,43 +1,43 @@
 import {gql} from '@apollo/client';
 
 const threadsQuery = gql`
-  query Thread($groupId: String!, $threadId: String!) {
-      thread(group_id: $groupId, thread_id: $threadId) {
-        group_id,
-        thread_id,
-        thread_name,
-      }
+  query Thread($threadId: String!) {
+    thread(id: $threadId) {
+      id,
+      groupId, 
+      threadName
     }
+  }
 `;
 const threadCommentsQuery = gql`
-  query ThreadComments($groupId: String!, $threadId: String!) {
-      thread(group_id: $groupId, thread_id: $threadId) {
-        comments {
-          comment_id,
-          title,
-          body,
-          commented_by {
-            user_id,
-            user_name
-          },
-          commented_at
-        }
+  query ThreadComments($threadId: String!) {
+    thread(id: $threadId) {
+      comments {
+        id,
+        title,
+        body,
+        commentedBy {
+          id,
+          userName
+        },
+        commentedAt
       }
     }
+  }
 `;
 
 const createThreadMutation = gql`
   mutation CreateThread($groupId: String!, $threadName: String!) {
-    createThread(group_id: $groupId, thread_name: $threadName) {
-      thread_id
+    createThread(groupId: $groupId, threadName: $threadName) {
+      id
     }
   }
 `;
 
 const threadCommentMutation = gql`
-  mutation CreateThreadComment($groupId: String!, $threadId: String!, $title: String!, $body: String!) {
-    createThreadComment(group_id: $groupId, thread_id: $threadId, title: $title, body: $body) {
-      thread_id
+  mutation CreateThreadComment($threadId: String!, $title: String!, $body: String!) {
+    createThreadComment(threadId: $threadId, title: $title, body: $body) {
+      id
     }
   }
 `;

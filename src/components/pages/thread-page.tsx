@@ -15,7 +15,7 @@ type ThreadFormValues = {
   body: string;
 };
 
-function ThreadForm({groupId, threadId}: {groupId: string; threadId: string}) {
+function ThreadForm({threadId}: {threadId: string}) {
   const [isLoading, setIsLoading] = useState(false);
   const callback = useRecoilCallback(({snapshot, refresh}) => async ({title, body}: ThreadFormValues) => {
     setIsLoading(true);
@@ -23,7 +23,6 @@ function ThreadForm({groupId, threadId}: {groupId: string; threadId: string}) {
     try {
       const client = await snapshot.getPromise(apiClientSelector);
       const parameter = {
-        groupId,
         threadId,
         title,
         body,
@@ -34,14 +33,13 @@ function ThreadForm({groupId, threadId}: {groupId: string; threadId: string}) {
         variables: parameter,
       });
       console.log(result);
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      refresh(threadCommentsSelector({group_id: groupId, thread_id: threadId}));
+      refresh(threadCommentsSelector(threadId));
     } catch (error) {
       console.error(error);
     }
 
     setIsLoading(false);
-  }, [groupId, threadId]);
+  }, [threadId]);
 
   return (
     <Card title='新規投稿'>
@@ -60,24 +58,23 @@ function ThreadForm({groupId, threadId}: {groupId: string; threadId: string}) {
   );
 }
 
-function ThreadCommentCard(comment: {body: string; commented_by: {user_name: string}; commented_at: string}) {
-  return <Comment content={comment.body} author={comment.commented_by.user_name} datetime={comment.commented_at}/>;
+function ThreadCommentCard(comment: {body: string; commentedBy: {userName: string}; commentedAt: string}) {
+  return <Comment content={comment.body} author={comment.commentedBy.userName} datetime={comment.commentedAt}/>;
 }
 
 function ThreadPageContent() {
-  const parameters = useParams<{group_id: string; thread_id: string}>();
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const thread = useRecoilValue(threadSelector({group_id: parameters.group_id ?? '', thread_id: parameters.thread_id ?? ''}));
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const comments = useRecoilValue(threadCommentsSelector({group_id: parameters.group_id ?? '', thread_id: parameters.thread_id ?? ''}));
+  const parameters = useParams<{groupId: string; threadId: string}>();
+
+  const thread = useRecoilValue(threadSelector(parameters.threadId ?? ''));
+  const comments = useRecoilValue(threadCommentsSelector(thread?.id ?? ''));
   if (!thread) {
     return null;
   }
 
   return (
-    <Card title={thread?.thread_name}>
-      <ThreadForm groupId={thread?.group_id} threadId={thread?.thread_id}/>
-      {reverse(sortBy(prop('commented_at'), comments)).map(c => <ThreadCommentCard key={c.comment_id} {...c}/>)}
+    <Card title={thread?.threadName}>
+      <ThreadForm threadId={thread?.id}/>
+      {reverse(sortBy(prop('commentedAt'), comments)).map(c => <ThreadCommentCard key={c.id} {...c}/>)}
     </Card>
   );
 }

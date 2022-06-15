@@ -22,8 +22,8 @@ function AppRoutes() {
               <RequireAuth redirect>
                 <Routes>
                   <Route path='/' element={<TopPage/>}/>
-                  <Route path='groups/:group_id' element={<GroupPage/>}>
-                    <Route path='threads/:thread_id' element={<ThreadPage/>}/>
+                  <Route path='groups/:groupId' element={<GroupPage/>}>
+                    <Route path='threads/:threadId' element={<ThreadPage/>}/>
                   </Route>
                 </Routes>
               </RequireAuth>

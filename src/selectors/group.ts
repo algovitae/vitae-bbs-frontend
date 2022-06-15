@@ -3,16 +3,16 @@ import {selector, selectorFamily} from 'recoil';
 import {Group, GroupDocument, GroupQuery, GroupThreadsDocument, GroupThreadsQuery, Thread, UserIdentityByAuthorizationDocument, UserIdentityByAuthorizationQuery} from '../api/generated';
 import {apiClientSelector} from './api';
 
-export const myGroupsSelector = selector<Array<{group_id: string; group_name: string}>>({
+export const myGroupsSelector = selector<Array<{id: string; groupName: string}>>({
   key: 'myGroupsSelector',
   async get({get}) {
     const api = get(apiClientSelector);
     const result = await api.query<UserIdentityByAuthorizationQuery>({query: UserIdentityByAuthorizationDocument});
-    return (result.data.userIdentityByAuthorization?.user?.memberships.map(m => m.group) ?? []) as Array<{group_id: string; group_name: string}>;
+    return (result.data.userIdentityByAuthorization?.user?.memberships.map(m => m.group) ?? []) as Array<{id: string; groupName: string}>;
   },
 });
 
-export const groupSelector = selectorFamily<Pick<Group, 'group_id' | 'group_name'> | undefined, string>({
+export const groupSelector = selectorFamily<Pick<Group, 'id' | 'groupName'> | undefined, string>({
   key: 'groupSelector',
   get: groupId => async ({get}) => {
     const api = get(apiClientSelector);
@@ -24,7 +24,7 @@ export const groupSelector = selectorFamily<Pick<Group, 'group_id' | 'group_name
   },
 });
 
-export const groupThreadsSelector = selectorFamily<Array<Pick<Thread, 'thread_id' | 'thread_name'>>, string>({
+export const groupThreadsSelector = selectorFamily<Array<Pick<Thread, 'id' | 'threadName'>>, string>({
   key: 'groupThreadsSelector',
   get: groupId => async ({get}) => {
     const api = get(apiClientSelector);

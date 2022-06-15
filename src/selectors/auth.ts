@@ -32,7 +32,7 @@ export const loggedInUserIdSelector = selector({
   key: 'loggedInUserIdSelector',
   get({get}) {
     const accessToken = get(rawAccessTokenAtom);
-    return accessToken?.user_identity?.user?.user_id;
+    return accessToken?.userIdentity?.user?.id;
   },
 });
 
@@ -40,7 +40,7 @@ export const loggedInUserNameSelector = selector({
   key: 'loggedInUserNameSelector',
   get({get}) {
     const accessToken = get(rawAccessTokenAtom);
-    return accessToken?.user_identity?.user?.user_name;
+    return accessToken?.userIdentity?.user?.userName;
   },
 });
 
