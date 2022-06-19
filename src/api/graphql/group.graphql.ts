@@ -20,6 +20,19 @@ const groupThreadsQuery = gql`
   }
 `;
 
+const groupMembersQuery = gql`
+  query GroupMembers($groupId: String!) {
+    group(id: $groupId) {
+      memberships {
+        user {
+          id,
+          userName
+        }
+      }
+    }
+  }
+`;
+
 const createGroupMutation = gql`
   mutation CreateGroup($groupName: String!, $memberships: [String!]!) {
     createGroup(groupName: $groupName, memberships: $memberships) {

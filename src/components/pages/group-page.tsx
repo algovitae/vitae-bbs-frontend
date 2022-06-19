@@ -1,4 +1,4 @@
-import {Button, Card, Col, Form, Input, Modal, Row, Skeleton, Table} from 'antd';
+import {Button, Card, Col, Form, Input, Modal, Row, Skeleton, Space, Table} from 'antd';
 import React, {useState} from 'react';
 import {Link, Navigate, useOutlet, useParams} from 'react-router-dom';
 import {useRecoilCallback, useRecoilValue} from 'recoil';
@@ -15,6 +15,7 @@ function InitiateCreateThreadButton({groupId}: {groupId: string}) {
 
   const [isLoading, setIsLoading] = useState(false);
   const callback = useRecoilCallback(({snapshot, refresh}) => async ({thread_name}: CreateThreadValues) => {
+    const release = snapshot.retain();
     setIsLoading(true);
 
     try {
@@ -35,6 +36,7 @@ function InitiateCreateThreadButton({groupId}: {groupId: string}) {
       console.error(error);
     }
 
+    release();
     setIsLoading(false);
   }, [groupId]);
   return (
@@ -74,7 +76,14 @@ function GroupPageContent() {
   }
 
   return (
-    <Card title={group?.groupName} extra={<InitiateCreateThreadButton groupId={group.id}/>}>
+    <Card
+      title={group?.groupName} extra={
+        <Space direction='horizontal'>
+          <Link to={`/members/${group.id}/`}>メンバー管理</Link>
+          <InitiateCreateThreadButton groupId={group.id}/>
+        </Space>
+      }
+    >
       <Table
         dataSource={threads} rowKey='id' columns={[{
           dataIndex: 'threadName',
