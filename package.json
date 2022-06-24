@@ -47,7 +47,9 @@
     "build": "DISABLE_ESLINT_PLUGIN=true craco build",
     "test": "xo && craco test",
     "eject": "react-scripts eject",
-    "graphql:generate": "graphql-codegen --config graphql.codegen.yml"
+    "graphql:generate": "graphql-codegen --config graphql.codegen.yml",
+    "predeploy:dev": "yarn build",
+    "deploy:dev": "aws s3 sync build/ s3://`aws s3 ls | grep website-dev | awk '{print $3}'`/"
   },
   "browserslist": {
     "production": [
