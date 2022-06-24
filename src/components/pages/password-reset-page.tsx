@@ -2,28 +2,27 @@ import {Button, Form, Input, Layout, PageHeader, Space} from 'antd';
 import {useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useRecoilCallback} from 'recoil';
-import {LoginMutationVariables} from '../../api/generated';
-import {useAuthMutations} from '../../selectors/auth';
+import {LoginMutationVariables, ResetPasswordMutationVariables} from '../../api/generated';
+import {useAuthMutations, usePasswordResetMutation} from '../../selectors/auth';
 
 function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const [loginApi] = useAuthMutations();
-  const location = useLocation();
+  const resetApi = usePasswordResetMutation();
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const from: string = (location.state as any)?.from?.pathname || '/';
 
-  const login = useRecoilCallback(
+  const reset = useRecoilCallback(
     () =>
-      async ({email, password}: Required<LoginMutationVariables>) => {
+      async ({email}: Required<ResetPasswordMutationVariables>) => {
         setLoading(true);
         try {
-          const [success] = await loginApi({email, password});
+          const [success] = await resetApi({email});
           if (success) {
-            navigate(from);
+            // eslint-disable-next-line no-alert
+            alert('メールを送信しました');
+            navigate('/');
           } else {
             // eslint-disable-next-line no-alert
-            alert('login failed.');
+            alert('メールの送信に失敗しました');
           }
         } catch (error) {
           console.error(error);
@@ -31,25 +30,22 @@ function LoginPage() {
 
         setLoading(false);
       },
-    [from],
+    [],
   );
 
   return (
     <Layout>
-      <PageHeader title='ログイン'/>
-      <Form onFinish={login}>
+      <PageHeader title='パスワード再設定'/>
+      <Form onFinish={reset}>
         <Form.Item name='email'>
           <Input type='email'/>
-        </Form.Item>
-        <Form.Item name='password'>
-          <Input type='password'/>
         </Form.Item>
         <Form.Item>
           <Space direction='horizontal'>
             <Button htmlType='submit' type='primary' loading={loading}>
-              ログイン
+              再設定(メール送信)
             </Button>
-            <Link to='/password_reset'>パスワード再設定</Link>
+            <Link to='/'>ログイン画面へ戻る</Link>
           </Space>
         </Form.Item>
       </Form>

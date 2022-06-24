@@ -5,6 +5,7 @@ import {RecoilRoot, useRecoilValue} from 'recoil';
 import {BrowserRouter, Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import TopPage from './components/pages/top-page';
 import LoginPage from './components/pages/login-page';
+import PasswordResetPage from './components/pages/password-reset-page';
 import GroupPage from './components/pages/group-page';
 import {loggedInUserIdSelector} from './selectors/auth';
 import {AppLayout} from './layout';
@@ -17,6 +18,7 @@ function AppRoutes() {
     <Routes>
       <Route element={<AppLayout/>}>
         <Route path='/login' element={<LoginPage/>}/>
+        <Route path='/password_reset' element={<PasswordResetPage/>}/>
         <Route
           path='*' element={
             (

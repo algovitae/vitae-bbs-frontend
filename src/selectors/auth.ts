@@ -13,6 +13,9 @@ import {
   LoginDocument,
   LoginMutation,
   LoginMutationVariables,
+  ResetPasswordDocument,
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables,
 } from '../api/generated';
 
 const apiClientWithoutAuth = () =>
@@ -73,4 +76,20 @@ export const useAuthMutations = () => {
   };
 
   return [login, logout] as const;
+};
+
+export const usePasswordResetMutation = () => {
+  const reset = async ({email}: Required<ResetPasswordMutationVariables>) => {
+    const apolloClient = apiClientWithoutAuth();
+    const result
+      = (
+        await apolloClient.mutate<ResetPasswordMutation>({
+          mutation: ResetPasswordDocument,
+          variables: {email},
+        })
+      ).data ?? {};
+    return [Boolean(result), ''] as const;
+  };
+
+  return reset;
 };

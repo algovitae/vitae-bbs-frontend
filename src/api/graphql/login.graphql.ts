@@ -14,3 +14,10 @@ const loginMutation = gql`
     }
   }
 `;
+
+const resetPasswordMutation = gql`
+  mutation ResetPassword($email: String!) {
+    resetPassword(email: $email)
+  }
+`;
+
