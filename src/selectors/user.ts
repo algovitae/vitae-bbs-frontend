@@ -1,6 +1,5 @@
 import {gql} from '@apollo/client';
 import {selector} from 'recoil';
-import {apolloClient} from '../api';
 import {AllUsersDocument, AllUsersQuery} from '../api/generated';
 import {apiClientSelector} from './api';
 

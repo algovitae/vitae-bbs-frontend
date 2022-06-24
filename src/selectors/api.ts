@@ -4,6 +4,7 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 import {selector, snapshot_UNSTABLE, useRecoilState} from 'recoil';
+import {apiEndpoint} from '../api/endpoint';
 import {
   LoginDocument,
   LoginMutation,
@@ -18,7 +19,7 @@ export const apiClientSelector = selector<ApolloClient<NormalizedCacheObject>>({
     const token = get(bearerTokenSelector);
     console.log('apiClientSelector userId', userId, token);
     const client = new ApolloClient({
-      uri: 'http://localhost:4000',
+      uri: apiEndpoint,
       headers: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Bearer ${token ?? ''}`,

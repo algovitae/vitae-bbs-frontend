@@ -17,10 +17,11 @@ import {
   ResetPasswordMutation,
   ResetPasswordMutationVariables,
 } from '../api/generated';
+import {apiEndpoint} from '../api/endpoint';
 
 const apiClientWithoutAuth = () =>
   new ApolloClient({
-    uri: 'http://localhost:4000',
+    uri: apiEndpoint,
     cache: new InMemoryCache({}),
   });
 
