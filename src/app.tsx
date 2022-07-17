@@ -12,6 +12,9 @@ import {AppLayout} from './layout';
 import {RequireAuth} from './components/auth/require-auth';
 import ThreadPage from './components/pages/thread-page';
 import MemberPage from './components/pages/member-page';
+import InitiateSignupPage from './components/pages/initiate-signup-page';
+import InitiatedSignupPage from './components/pages/initiated-signup-page';
+import SignupPage from './components/pages/signup-page';
 
 function AppRoutes() {
   return (
@@ -19,6 +22,9 @@ function AppRoutes() {
       <Route element={<AppLayout/>}>
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/password_reset' element={<PasswordResetPage/>}/>
+        <Route path='/signup' element={<InitiateSignupPage/>}/>
+        <Route path='/signup2' element={<InitiatedSignupPage/>}/>
+        <Route path='/signup3' element={<SignupPage/>}/>
         <Route
           path='*' element={
             (

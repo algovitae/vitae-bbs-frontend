@@ -50,6 +50,7 @@ function LoginPage() {
               ログイン
             </Button>
             <Link to='/password_reset'>パスワード再設定</Link>
+            <Link to='/signup'>会員登録</Link>
           </Space>
         </Form.Item>
       </Form>

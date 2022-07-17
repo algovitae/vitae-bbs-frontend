@@ -49,7 +49,7 @@ export const groupMembersSelector = selectorFamily<Array<Pick<User, 'id' | 'user
   },
 });
 
-export const usersNotInGroup = selectorFamily<Array<Pick<User, 'id' | 'userName'>>, string>({
+export const usersNotInGroup = selectorFamily<Array<Pick<User, 'id' | 'userName' | 'userTitle'>>, string>({
   key: 'usersNotInGroup',
   get: groupId => async ({get}) => {
     const allUsers = get(allUsersSelector);

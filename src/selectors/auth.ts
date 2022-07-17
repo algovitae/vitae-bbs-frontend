@@ -10,12 +10,18 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import {
+  InitiateSignupDocument,
+  InitiateSignupMutation,
+  InitiateSignupMutationVariables,
   LoginDocument,
   LoginMutation,
   LoginMutationVariables,
   ResetPasswordDocument,
   ResetPasswordMutation,
   ResetPasswordMutationVariables,
+  SignupDocument,
+  SignupMutation,
+  SignupMutationVariables,
 } from '../api/generated';
 import {apiEndpoint} from '../api/endpoint';
 
@@ -93,4 +99,32 @@ export const usePasswordResetMutation = () => {
   };
 
   return reset;
+};
+
+export const useSignupMutations = () => {
+  const initiateSignup = async ({email, passphrase}: Required<InitiateSignupMutationVariables>) => {
+    const apolloClient = apiClientWithoutAuth();
+    const result
+      = (
+        await apolloClient.mutate<InitiateSignupMutation>({
+          mutation: InitiateSignupDocument,
+          variables: {email, passphrase},
+        })
+      ).data ?? {};
+    return [Boolean(result), ''] as const;
+  };
+
+  const signup = async ({token, userName, userTitle, password}: Required<SignupMutationVariables>) => {
+    const apolloClient = apiClientWithoutAuth();
+    const result
+      = (
+        await apolloClient.mutate<SignupMutation>({
+          mutation: SignupDocument,
+          variables: {token, userName, userTitle, password},
+        })
+      ).data ?? {};
+    return [Boolean(result), ''] as const;
+  };
+
+  return [initiateSignup, signup] as const;
 };

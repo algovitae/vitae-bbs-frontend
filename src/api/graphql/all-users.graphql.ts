@@ -5,6 +5,7 @@ const allUsersQuery = gql`
     allUsers {
       id
       userName
+      userTitle
     }
   }
 `;

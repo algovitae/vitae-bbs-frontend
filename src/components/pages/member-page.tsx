@@ -5,6 +5,7 @@ import {Navigate, useParams} from 'react-router-dom';
 import {useRecoilValue, useRecoilCallback} from 'recoil';
 import {AddMembershipDocument, AddMembershipMutation, DeleteMembershipDocument, DeleteMembershipMutation, User} from '../../api/generated';
 import {apiClientSelector} from '../../selectors/api';
+import {appSelector} from '../../selectors/app';
 import {groupMembersSelector, groupSelector, usersNotInGroup} from '../../selectors/group';
 import {allUsersSelector} from '../../selectors/user';
 
@@ -83,7 +84,7 @@ function InitiateAddMemberButton({groupId}: {groupId: string}) {
                 showSearch
                 placeholder='Select a person'
                 optionFilterProp='label'
-                options={users.map(u => ({value: u.id, label: u.userName}))}
+                options={users.map(u => ({value: u.id, label: `${u.userName} [${u.userTitle}]`}))}
                 filterOption={(input, option) =>
                   (option!.label as unknown as string).toLowerCase().includes(input.toLowerCase())}
               />
@@ -100,6 +101,7 @@ function InitiateAddMemberButton({groupId}: {groupId: string}) {
 
 function MemberPageContent() {
   const parameters = useParams<{groupId: string}>();
+  const config = useRecoilValue(appSelector);
   const groupId = parameters.groupId!;
   const group = useRecoilValue(groupSelector(groupId));
   const members = useRecoilValue(groupMembersSelector(groupId));
@@ -110,12 +112,14 @@ function MemberPageContent() {
   return (
     <Card title={group?.groupName} extra={<InitiateAddMemberButton groupId={groupId}/>}>
       <Table
-        rowKey='id' columns={[{dataIndex: 'userName'}, {
-          dataIndex: 'id',
-          render(value: string, record, index) {
-            return <RemoveMemberButton groupId={group.id} userId={value}/>;
-          },
-        }]} dataSource={members}/>
+        rowKey='id' columns={[{dataIndex: 'userName', title: 'ユーザー名'},
+          {dataIndex: 'userTitle', title: config.user_title_label},
+          {
+            dataIndex: 'id',
+            render(value: string, record, index) {
+              return <RemoveMemberButton groupId={group.id} userId={value}/>;
+            },
+          }]} dataSource={members}/>
     </Card>
   );
 }
