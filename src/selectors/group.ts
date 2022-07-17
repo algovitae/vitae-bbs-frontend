@@ -37,7 +37,7 @@ export const groupThreadsSelector = selectorFamily<Array<Pick<Thread, 'id' | 'th
   },
 });
 
-export const groupMembersSelector = selectorFamily<Array<Pick<User, 'id' | 'userName'>>, string>({
+export const groupMembersSelector = selectorFamily<Array<Pick<User, 'id' | 'userName' | 'userTitle'>>, string>({
   key: 'groupThreadsSelector',
   get: groupId => async ({get}) => {
     const api = get(apiClientSelector);

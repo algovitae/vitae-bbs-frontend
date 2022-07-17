@@ -27,6 +27,7 @@ const groupMembersQuery = gql`
         user {
           id,
           userName
+          userTitle
         }
       }
     }
