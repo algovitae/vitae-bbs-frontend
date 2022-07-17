@@ -72,7 +72,7 @@ export const useAuthMutations = () => {
           mutation: LoginDocument,
           variables: {email, password},
         })
-      ).data ?? {};
+      ).data ?? {login: undefined};
     setRawAccessToken(login ?? undefined);
     return [Boolean(login), ''] as const; // TODO: add reason?
   };
@@ -88,14 +88,14 @@ export const useAuthMutations = () => {
 export const usePasswordResetMutation = () => {
   const reset = async ({email}: Required<ResetPasswordMutationVariables>) => {
     const apolloClient = apiClientWithoutAuth();
-    const result
+    const {resetPassword}
       = (
         await apolloClient.mutate<ResetPasswordMutation>({
           mutation: ResetPasswordDocument,
           variables: {email},
         })
       ).data ?? {};
-    return [Boolean(result), ''] as const;
+    return [Boolean(resetPassword), ''] as const;
   };
 
   return reset;
@@ -104,26 +104,26 @@ export const usePasswordResetMutation = () => {
 export const useSignupMutations = () => {
   const initiateSignup = async ({email, passphrase}: Required<InitiateSignupMutationVariables>) => {
     const apolloClient = apiClientWithoutAuth();
-    const result
+    const {initiateSignup}
       = (
         await apolloClient.mutate<InitiateSignupMutation>({
           mutation: InitiateSignupDocument,
           variables: {email, passphrase},
         })
       ).data ?? {};
-    return [Boolean(result), ''] as const;
+    return [Boolean(initiateSignup), ''] as const;
   };
 
   const signup = async ({token, userName, userTitle, password}: Required<SignupMutationVariables>) => {
     const apolloClient = apiClientWithoutAuth();
-    const result
+    const {signup}
       = (
         await apolloClient.mutate<SignupMutation>({
           mutation: SignupDocument,
           variables: {token, userName, userTitle, password},
         })
       ).data ?? {};
-    return [Boolean(result), ''] as const;
+    return [Boolean(signup), ''] as const;
   };
 
   return [initiateSignup, signup] as const;
