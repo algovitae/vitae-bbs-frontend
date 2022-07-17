@@ -6,6 +6,8 @@ import {useParams} from 'react-router-dom';
 import {useRecoilCallback, useRecoilValue} from 'recoil';
 import TextArea from 'antd/lib/input/TextArea';
 import {prop, reverse, sortBy} from 'rambda';
+import {format, parseISO} from 'date-fns';
+import {formatInTimeZone} from 'date-fns-tz';
 import {CreateThreadCommentDocument, CreateThreadCommentMutation, ThreadComment} from '../../api/generated';
 import {threadCommentsSelector, threadSelector} from '../../selectors/thread';
 import {apiClientSelector} from '../../selectors/api';
@@ -59,7 +61,7 @@ function ThreadForm({threadId}: {threadId: string}) {
 }
 
 function ThreadCommentCard(comment: {body: string; commentedBy: {userName: string}; commentedAt: string}) {
-  return <Comment content={comment.body} author={comment.commentedBy.userName} datetime={comment.commentedAt}/>;
+  return <Comment content={comment.body} author={comment.commentedBy.userName} datetime={formatInTimeZone(parseISO(comment.commentedAt), 'Asia/Tokyo', 'yyyy-MM-dd HH:mm')}/>;
 }
 
 function ThreadPageContent() {
