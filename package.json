@@ -64,7 +64,9 @@
     "eject": "react-scripts eject",
     "graphql:generate": "graphql-codegen --config graphql.codegen.yml",
     "predeploy:dev": "yarn build",
-    "deploy:dev": "aws s3 sync build/ s3://`aws s3 ls | grep website-dev | awk '{print $3}'`/"
+    "deploy:dev": "aws s3 sync build/ s3://`aws s3 ls | grep website-dev | awk '{print $3}'`/",
+    "predeploy:prod": "yarn build",
+    "deploy:prod": "aws s3 sync build/ s3://`aws s3 ls | grep website-bbs | awk '{print $3}'`/"
   },
   "browserslist": {
     "production": [
